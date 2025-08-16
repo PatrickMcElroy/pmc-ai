@@ -229,12 +229,13 @@ export default function App() {
       <header className="sticky top-0 z-30 border-b border-black/10 bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60">
         <div className="mx-auto max-w-6xl px-4 py-4 flex items-center justify-between">
           {/* Logo */}
-          <div
-            className="font-black text-2xl md:text-3xl tracking-tight select-none"
-            aria-label="PMC logo"
-            data-testid="logo"
-          >
-            PMC
+          <div className="flex items-center" aria-label="PMC logo" data-testid="logo">
+            <img 
+              src="/pmc_logo_wordmark.svg" 
+              alt="PMC" 
+              className="h-8 md:h-10 w-auto text-black"
+              style={{ color: 'currentColor' }}
+            />
           </div>
 
           {/* Primary CTA — back to scheduling */}
