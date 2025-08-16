@@ -229,13 +229,12 @@ export default function App() {
       <header className="sticky top-0 z-30 border-b border-black/10 bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60">
         <div className="mx-auto max-w-6xl px-4 py-4 flex items-center justify-between">
           {/* Logo */}
-          <div className="flex items-center" aria-label="PMC logo" data-testid="logo">
-            <img 
-              src="/pmc_logo_wordmark.svg" 
-              alt="PMC" 
-              className="h-8 md:h-10 w-auto text-black"
-              style={{ color: 'currentColor' }}
-            />
+          <div
+            className="font-black text-2xl md:text-3xl tracking-tight select-none"
+            aria-label="PMC logo"
+            data-testid="logo"
+          >
+            PMC
           </div>
 
           {/* Primary CTA — back to scheduling */}
@@ -395,6 +394,12 @@ export default function App() {
           href={nextHref}
           data-testid="sticky-cta"
           className="rounded-full border border-black bg-white px-5 py-2.5 text-sm font-medium shadow hover:bg-black hover:text-white transition"
+          onClick={(e) => {
+            if (nextLabel === "Back to top") {
+              e.preventDefault();
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+          }}
         >
           {nextLabel}
         </a>

@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  /* Add scroll padding to account for sticky header */
+  scroll-padding-top: 5rem;
+}
 html, body {
   background: #fff;
   color: #000;
