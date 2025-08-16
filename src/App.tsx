@@ -395,22 +395,20 @@ export default function App() {
         </a>
       </div>
 
-      {/* Developer test results - hidden in production */}
-      {process.env.NODE_ENV === 'development' && (
-        <section id="__dev_tests" className="mx-auto max-w-6xl px-4 py-8">
-          <details>
-            <summary className="cursor-pointer text-sm text-black/60">Developer test results ({tests.filter(t=>t.pass).length}/{tests.length} passing)</summary>
-            <ul className="mt-3 space-y-1 text-sm">
-              {tests.map((t, i) => (
-                <li key={i} className={t.pass ? "text-emerald-700" : "text-red-700"}>
-                  {t.pass ? "✓" : "✗"} {t.name}
-                  {t.details ? <span className="text-black/50"> — {t.details}</span> : null}
-                </li>
-              ))}
-            </ul>
-          </details>
-        </section>
-      )}
+      {/* Developer test results */}
+      <section id="__dev_tests" className="mx-auto max-w-6xl px-4 py-8">
+        <details>
+          <summary className="cursor-pointer text-sm text-black/60">Developer test results ({tests.filter(t=>t.pass).length}/{tests.length} passing)</summary>
+          <ul className="mt-3 space-y-1 text-sm">
+            {tests.map((t, i) => (
+              <li key={i} className={t.pass ? "text-emerald-700" : "text-red-700"}>
+                {t.pass ? "✓" : "✗"} {t.name}
+                {t.details ? <span className="text-black/50"> — {t.details}</span> : null}
+              </li>
+            ))}
+          </ul>
+        </details>
+      </section>
     </main>
   );
 }
