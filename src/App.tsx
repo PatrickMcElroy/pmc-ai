@@ -4,8 +4,7 @@ import React, { useState, useEffect } from "react";
 // - Single-file React component
 // - Tailwind CSS utility classes
 // - Includes: sticky header with PMC logo, services grid with per‑card integrations,
-//   freeform assistant box, a bottom blog section, dynamic "next section" sticky CTA,
-//   and a small developer test panel.
+//   freeform assistant box, a bottom blog section, and dynamic "next section" sticky CTA.
 
 const services = [
   {
@@ -308,7 +307,7 @@ export default function App() {
         <div className="rounded-2xl border border-black/20 p-6">
           <div className="flex items-center justify-between gap-4 flex-wrap">
             <h3 className="text-lg font-semibold" data-testid="assistant-title">How can PMC help you?</h3>
-            <span className="text-xs text-black/50">Prototype call to your custom model</span>
+            <span className="text-xs text-black/50">Calls custom PMC model to answer your questions</span>
           </div>
 
           <label htmlFor="prompt" className="sr-only">
@@ -345,15 +344,6 @@ export default function App() {
             </div>
           </div>
 
-          {/* Integration note */}
-          <details className="mt-4 text-xs text-black/50">
-            <summary className="cursor-pointer">How to wire this to your backend</summary>
-            <div className="mt-2">
-              Replace the simulated timeout in <code>askModel()</code> with a call to your
-              API endpoint (e.g., <code>/api/pmc-brief</code>) that invokes your custom model. Return a
-              concise plain‑English outline with 2–3 actionable next steps.
-            </div>
-          </details>
         </div>
       </section>
 
@@ -383,7 +373,7 @@ export default function App() {
       {/* Footer */}
       <footer className="border-t border-black/10">
         <div className="mx-auto max-w-6xl px-4 py-8 text-sm text-black/50 flex items-center justify-between">
-          <div className="font-bold">PMC</div>
+          <div className="font-bold">PMC Consulting</div>
           <div data-testid="footer-tag">@2025 Patrick McElroy Consulting LLC.</div>
         </div>
       </footer>
@@ -405,20 +395,22 @@ export default function App() {
         </a>
       </div>
 
-      {/* Developer test results */}
-      <section id="__dev_tests" className="mx-auto max-w-6xl px-4 py-8">
-        <details>
-          <summary className="cursor-pointer text-sm text-black/60">Developer test results ({tests.filter(t=>t.pass).length}/{tests.length} passing)</summary>
-          <ul className="mt-3 space-y-1 text-sm">
-            {tests.map((t, i) => (
-              <li key={i} className={t.pass ? "text-emerald-700" : "text-red-700"}>
-                {t.pass ? "✓" : "✗"} {t.name}
-                {t.details ? <span className="text-black/50"> — {t.details}</span> : null}
-              </li>
-            ))}
-          </ul>
-        </details>
-      </section>
+      {/* Developer test results - hidden in production */}
+      {process.env.NODE_ENV === 'development' && (
+        <section id="__dev_tests" className="mx-auto max-w-6xl px-4 py-8">
+          <details>
+            <summary className="cursor-pointer text-sm text-black/60">Developer test results ({tests.filter(t=>t.pass).length}/{tests.length} passing)</summary>
+            <ul className="mt-3 space-y-1 text-sm">
+              {tests.map((t, i) => (
+                <li key={i} className={t.pass ? "text-emerald-700" : "text-red-700"}>
+                  {t.pass ? "✓" : "✗"} {t.name}
+                  {t.details ? <span className="text-black/50"> — {t.details}</span> : null}
+                </li>
+              ))}
+            </ul>
+          </details>
+        </section>
+      )}
     </main>
   );
 }
