@@ -229,7 +229,7 @@ export default function App() {
         <div className="mx-auto max-w-6xl px-4 py-4 flex items-center justify-between">
           {/* Logo */}
           <div
-            className="font-black text-2xl md:text-3xl tracking-tight select-none"
+            className="font-black text-3xl md:text-4xl tracking-tight select-none"
             aria-label="PMC logo"
             data-testid="logo"
           >
