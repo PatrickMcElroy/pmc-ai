@@ -133,7 +133,13 @@ export default function App() {
 
     // Footer tag
     const footerTag = document.querySelector('[data-testid="footer-tag"]');
-    results.push({ name: "Footer tag text", pass: footerTag?.textContent?.trim() === "@2025 Patrick McElroy Consulting LLC." });
+    const currentYear = new Date().getFullYear();
+    results.push({
+      name: "Footer tag text",
+      pass:
+        footerTag?.textContent?.trim() ===
+        `©${currentYear} Patrick McElroy Consulting LLC.`,
+    });
 
     // Services include MCP Development
     results.push({ name: "Services include MCP Development", pass: services.some((s) => s.title === "MCP Development") });
@@ -374,7 +380,7 @@ export default function App() {
       <footer className="border-t border-black/10">
         <div className="mx-auto max-w-6xl px-4 py-8 text-sm text-black/50 flex items-center justify-between">
           <div className="font-bold">PMC Consulting</div>
-          <div data-testid="footer-tag">@2025 Patrick McElroy Consulting LLC.</div>
+          <div data-testid="footer-tag">©{new Date().getFullYear()} Patrick McElroy Consulting LLC.</div>
         </div>
       </footer>
 
