@@ -23,7 +23,7 @@ export default function BlogPost() {
             target="_blank"
             rel="noreferrer"
             data-testid="header-cta"
-            className="rounded-full border border-black px-4 py-2 text-sm font-medium text-blue-600 hover:bg-black hover:text-white transition"
+            className="rounded-full border border-indigo-600 text-indigo-600 px-5 py-2.5 text-sm font-medium hover:bg-indigo-600 hover:text-white transition"
           >
             Schedule a Consult
           </a>
