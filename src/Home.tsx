@@ -232,23 +232,6 @@ export default function Home() {
             PMC partners with teams to remove busywork, connect systems, and ship
             pragmatic AI that pays for itself.
           </p>
-          <div className="mt-8 flex gap-3">
-            <a
-              href="https://calendly.com/pmc-consult/intro"
-              target="_blank"
-              rel="noreferrer"
-              data-testid="hero-cta"
-              className="rounded-full border border-black px-5 py-2.5 text-sm font-medium hover:bg-black hover:text-white transition"
-            >
-              Schedule a Consult
-            </a>
-            <a
-              href="#what-we-do"
-              className="rounded-full border border-black/30 px-5 py-2.5 text-sm font-medium hover:border-black transition"
-            >
-              See What We Do
-            </a>
-          </div>
         </div>
       </section>
 
