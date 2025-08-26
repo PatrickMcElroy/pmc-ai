@@ -12,7 +12,7 @@ export default function BlogPost() {
       <header className="sticky top-0 z-30 border-b border-black/10 bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60">
         <div className="mx-auto max-w-6xl px-4 py-4 flex items-center justify-between">
           <div
-            className="font-black text-3xl md:text-4xl tracking-tight select-none"
+            className="font-black text-4xl md:text-5xl tracking-tight select-none"
             aria-label="PMC logo"
             data-testid="logo"
           >
