@@ -11,7 +11,7 @@ import {
   BarElement,
   type ChartOptions,
 } from "chart.js";
-import { Pie, Bar } from "react-chartjs-2";
+import { Doughnut, Bar } from "react-chartjs-2";
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement);
 
@@ -31,10 +31,14 @@ const AnimatedNumber = ({ value }: { value: number }) => {
     return () => cancelAnimationFrame(frame);
   }, [value]);
 
-  return <div className="text-3xl font-semibold">${Math.round(display).toLocaleString()}</div>;
+  return (
+    <div className="text-3xl font-semibold text-indigo-600">
+      {Math.round(display)}%
+    </div>
+  );
 };
 
-const pieData = {
+const doughnutData = {
   labels: ["Fail", "Succeed"],
   datasets: [
     {
@@ -45,8 +49,9 @@ const pieData = {
   ],
 };
 
-const pieOptions: ChartOptions<"pie"> = {
+const doughnutOptions: ChartOptions<"doughnut"> = {
   plugins: { legend: { display: false } },
+  cutout: "70%",
 };
 
 const barData = {
@@ -305,17 +310,17 @@ export default function Home() {
       {/* AI stats */}
       <section className="mx-auto max-w-6xl px-4 py-10">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="rounded-2xl border border-indigo-100 bg-indigo-50/80 backdrop-blur supports-[backdrop-filter]:bg-indigo-50/60 p-4 flex flex-col items-center justify-center h-48">
-            <Pie data={pieData} options={pieOptions} className="w-full h-full" />
-            <p className="mt-2 text-sm text-black/70 text-center">95% of AI pilots fail</p>
+          <div className="flex flex-col items-center justify-center h-48 p-4">
+            <Doughnut data={doughnutData} options={doughnutOptions} className="w-full h-full" />
+            <h3 className="mt-2 text-lg font-semibold text-indigo-600 text-center">95% of AI pilots fail</h3>
           </div>
-          <div className="rounded-2xl border border-indigo-100 bg-indigo-50/80 backdrop-blur supports-[backdrop-filter]:bg-indigo-50/60 p-4 flex flex-col justify-center h-48">
+          <div className="flex flex-col justify-center h-48 p-4">
             <Bar data={barData} options={barOptions} className="w-full h-full" />
-            <p className="mt-2 text-sm text-black/70 text-center">Successful AI trials: internal vs external</p>
+            <h3 className="mt-2 text-lg font-semibold text-indigo-600 text-center">Successful AI trials: internal vs external</h3>
           </div>
-          <div className="rounded-2xl border border-indigo-100 bg-indigo-50/80 backdrop-blur supports-[backdrop-filter]:bg-indigo-50/60 p-4 flex flex-col items-center justify-center h-48">
-            <AnimatedNumber value={1200000} />
-            <p className="mt-2 text-sm text-black/70 text-center">Average savings per successful pilot</p>
+          <div className="flex flex-col items-center justify-center h-48 p-4">
+            <AnimatedNumber value={30} />
+            <h3 className="mt-2 text-lg font-semibold text-indigo-600 text-center">Average savings per successful pilot</h3>
           </div>
         </div>
       </section>
