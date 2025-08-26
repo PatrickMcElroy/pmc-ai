@@ -370,7 +370,12 @@ export default function App() {
                   <span key={t} className="text-xs border border-black/20 rounded-full px-2 py-0.5">{t}</span>
                 ))}
               </div>
-              <a href="#" className="mt-4 inline-block text-sm underline underline-offset-4">Read more</a>
+              <a
+                href={`/blog/${slug(p.title)}.html`}
+                className="mt-4 inline-block text-sm underline underline-offset-4"
+              >
+                Read more
+              </a>
             </article>
           ))}
         </div>
