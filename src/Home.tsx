@@ -1,6 +1,78 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { blogPosts, slug } from "./blogPosts";
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  type ChartOptions,
+} from "chart.js";
+import { Doughnut, Bar } from "react-chartjs-2";
+
+ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement);
+
+const AnimatedNumber = ({ value }: { value: number }) => {
+  const [display, setDisplay] = useState(0);
+
+  useEffect(() => {
+    let frame: number;
+    const duration = 1000;
+    const start = performance.now();
+    const step = (time: number) => {
+      const progress = Math.min((time - start) / duration, 1);
+      setDisplay(progress * value);
+      if (progress < 1) frame = requestAnimationFrame(step);
+    };
+    frame = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(frame);
+  }, [value]);
+
+  return (
+    <div className="text-3xl font-semibold text-indigo-600">
+      {Math.round(display)}%
+    </div>
+  );
+};
+
+const doughnutData = {
+  labels: ["Fail", "Succeed"],
+  datasets: [
+    {
+      data: [95, 5],
+      backgroundColor: ["#4f46e5", "#c7d2fe"],
+      borderWidth: 0,
+    },
+  ],
+};
+
+const doughnutOptions: ChartOptions<"doughnut"> = {
+  plugins: { legend: { display: false } },
+  cutout: "70%",
+};
+
+const barData = {
+  labels: ["Internal", "External"],
+  datasets: [
+    {
+      data: [60, 40],
+      backgroundColor: ["#c7d2fe", "#4f46e5"],
+      borderWidth: 0,
+    },
+  ],
+};
+
+const barOptions: ChartOptions<"bar"> = {
+  indexAxis: "y",
+  plugins: { legend: { display: false } },
+  scales: {
+    x: { max: 100, ticks: { display: false }, grid: { display: false } },
+    y: { grid: { display: false } },
+  },
+};
 
 // Minimal, black & white homepage concepts for PMC Consulting
 // - Single-file React component
@@ -232,6 +304,24 @@ export default function Home() {
             PMC partners with teams to remove busywork, connect systems, and ship
             pragmatic AI that pays for itself.
           </p>
+        </div>
+      </section>
+
+      {/* AI stats */}
+      <section className="mx-auto max-w-6xl px-4 py-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="flex flex-col items-center justify-center h-48 p-4">
+            <Doughnut data={doughnutData} options={doughnutOptions} className="w-full h-full" />
+            <h3 className="mt-2 text-lg font-semibold text-indigo-600 text-center">95% of AI pilots fail</h3>
+          </div>
+          <div className="flex flex-col justify-center h-48 p-4">
+            <Bar data={barData} options={barOptions} className="w-full h-full" />
+            <h3 className="mt-2 text-lg font-semibold text-indigo-600 text-center">Successful AI trials: internal vs external</h3>
+          </div>
+          <div className="flex flex-col items-center justify-center h-48 p-4">
+            <AnimatedNumber value={30} />
+            <h3 className="mt-2 text-lg font-semibold text-indigo-600 text-center">Average savings per successful pilot</h3>
+          </div>
         </div>
       </section>
 
