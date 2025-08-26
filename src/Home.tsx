@@ -196,9 +196,9 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-white text-black">
+    <main className="min-h-screen bg-gradient-to-b from-white via-indigo-50 to-white text-black">
       {/* Sticky header */}
-      <header className="sticky top-0 z-30 border-b border-black/10 bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60">
+      <header className="sticky top-0 z-30 border-b border-indigo-100 bg-indigo-50/80 backdrop-blur supports-[backdrop-filter]:bg-indigo-50/60">
         <div className="mx-auto max-w-6xl px-4 py-4 flex items-center justify-between">
           {/* Logo */}
           <div
@@ -244,7 +244,7 @@ export default function Home() {
             </a>
             <a
               href="#what-we-do"
-              className="rounded-full border border-black/30 px-5 py-2.5 text-sm font-medium hover:border-black transition"
+              className="rounded-full border border-indigo-600 text-indigo-600 px-5 py-2.5 text-sm font-medium hover:bg-indigo-600 hover:text-white transition"
             >
               See What We Do
             </a>
@@ -298,7 +298,7 @@ export default function Home() {
             <button
               onClick={askModel}
               disabled={loading}
-              className="rounded-full border border-black px-4 py-2 text-sm font-medium disabled:opacity-50 hover:bg-black hover:text-white transition"
+              className="rounded-full border border-indigo-600 text-indigo-600 px-4 py-2 text-sm font-medium disabled:opacity-50 hover:bg-indigo-600 hover:text-white transition"
               data-testid="ask-btn"
             >
               {loading ? "Thinking…" : "Ask PMC AI"}
@@ -358,7 +358,7 @@ export default function Home() {
         <a
           href={nextHref}
           data-testid="sticky-cta"
-          className="rounded-full border border-black bg-white px-5 py-2.5 text-sm font-medium shadow hover:bg-black hover:text-white transition"
+          className="rounded-full border border-indigo-600 bg-white text-indigo-600 px-5 py-2.5 text-sm font-medium shadow hover:bg-indigo-600 hover:text-white transition"
           onClick={(e) => {
             if (nextLabel === "Back to top") {
               e.preventDefault();
