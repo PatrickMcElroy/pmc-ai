@@ -1,9 +1,47 @@
-import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "./Home";
-import BlogPost from "./BlogPost";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { blogPosts, slug } from "./blogPosts";
 
-export default function App() {
+// Minimal, black & white homepage concepts for PMC Consulting
+// - Single-file React component
+// - Tailwind CSS utility classes
+// - Includes: sticky header with PMC logo, services grid with per‑card integrations,
+//   freeform assistant box, a bottom blog section, and dynamic "next section" sticky CTA.
+
+const services = [
+  {
+    title: "Ops Automation",
+    blurb: "Eliminate manual data entry and handoffs across tools.",
+    integrations: "Zapier · Google Sheets · Excel",
+  },
+  {
+    title: "AI Helpdesk",
+    blurb: "Draft, triage, and auto‑resolve repetitive customer requests.",
+    integrations: "Email · Slack · CRM",
+  },
+  {
+    title: "System Integrations",
+    blurb: "Connect ERPs, TMS/WMS, CRMs, and spreadsheets cleanly.",
+    integrations: "ERP · TMS/WMS · CRM · LSP",
+  },
+  {
+    title: "SOP Codification",
+    blurb: "Turn your tribal knowledge into reliable, automated flows.",
+    integrations: "Google Docs · Confluence · Notion",
+  },
+  {
+    title: "MCP Development",
+    blurb: "Build and wire up Managed Context Platform agents and tools for reliable operator workflows.",
+    integrations: "Internal tools",
+  },
+  {
+    title: "Dashboards & Insight",
+    blurb: "Live KPIs for throughput, cycle time, and unit economics.",
+    integrations: "Google Sheets · Excel · Retool",
+  },
+];
+
+export default function Home() {
   const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
   const [answer, setAnswer] = useState<string | null>(null);
@@ -12,9 +50,6 @@ export default function App() {
   // Sticky CTA state — defaults assume hero in view
   const [nextHref, setNextHref] = useState<string>("#what-we-do");
   const [nextLabel, setNextLabel] = useState<string>("What can we do?");
-
-  // Helper to slugify for stable data-testids
-  const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
   useEffect(() => {
     // IntersectionObserver to determine current section and choose the next one
@@ -88,7 +123,7 @@ export default function App() {
     // Logo sizing classes
     const logo = document.querySelector('[data-testid="logo"]') as HTMLElement | null;
     const classList = logo?.className || "";
-    results.push({ name: "Logo size classes present", pass: classList.includes("text-4xl") && classList.includes("md:text-5xl") });
+    results.push({ name: "Logo size classes present", pass: classList.includes("text-2xl") && classList.includes("md:text-3xl") });
 
     // Services title
     const servicesTitle = document.querySelector('[data-testid="services-title"]');
@@ -167,7 +202,7 @@ export default function App() {
         <div className="mx-auto max-w-6xl px-4 py-4 flex items-center justify-between">
           {/* Logo */}
           <div
-            className="font-black text-4xl md:text-5xl tracking-tight select-none"
+            className="font-black text-3xl md:text-4xl tracking-tight select-none"
             aria-label="PMC logo"
             data-testid="logo"
           >
@@ -302,12 +337,9 @@ export default function App() {
                   <span key={t} className="text-xs border border-black/20 rounded-full px-2 py-0.5">{t}</span>
                 ))}
               </div>
-              <a
-                href={`/blog/${slug(p.title)}.html`}
-                className="mt-4 inline-block text-sm underline underline-offset-4"
-              >
+              <Link to={`/blog/${slug(p.title)}`} className="mt-4 inline-block text-sm underline underline-offset-4">
                 Read more
-              </a>
+              </Link>
             </article>
           ))}
         </div>
@@ -353,12 +385,5 @@ export default function App() {
         </details>
       </section>
     </main>
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/blog/:slug" element={<BlogPost />} />
-      </Routes>
-    </BrowserRouter>
   );
 }
