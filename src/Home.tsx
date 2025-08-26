@@ -341,7 +341,7 @@ export default function Home() {
         <a
           href={nextHref}
           data-testid="sticky-cta"
-          className="rounded-full border border-black bg-white px-5 py-2.5 text-sm font-medium shadow hover:bg-black hover:text-white transition"
+          className="rounded-full border border-indigo-600 bg-indigo-600 px-5 py-2.5 text-sm font-medium text-white shadow hover:bg-indigo-600 hover:text-white transition"
           onClick={(e) => {
             if (nextLabel === "Back to top") {
               e.preventDefault();
