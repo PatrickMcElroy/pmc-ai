@@ -156,7 +156,7 @@ export default function App() {
     // Logo sizing classes
     const logo = document.querySelector('[data-testid="logo"]') as HTMLElement | null;
     const classList = logo?.className || "";
-    results.push({ name: "Logo size classes present", pass: classList.includes("text-2xl") && classList.includes("md:text-3xl") });
+    results.push({ name: "Logo size classes present", pass: classList.includes("text-4xl") && classList.includes("md:text-5xl") });
 
     // Services title
     const servicesTitle = document.querySelector('[data-testid="services-title"]');
@@ -235,7 +235,7 @@ export default function App() {
         <div className="mx-auto max-w-6xl px-4 py-4 flex items-center justify-between">
           {/* Logo */}
           <div
-            className="font-black text-3xl md:text-4xl tracking-tight select-none"
+            className="font-black text-4xl md:text-5xl tracking-tight select-none"
             aria-label="PMC logo"
             data-testid="logo"
           >
