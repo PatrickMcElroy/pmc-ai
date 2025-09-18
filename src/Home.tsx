@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { blogPosts, slug } from "./blogPosts";
 
@@ -41,6 +41,9 @@ const services = [
   },
 ];
 
+const showAssistant = false;
+const showBlog = false;
+
 export default function Home() {
   const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
@@ -51,15 +54,25 @@ export default function Home() {
   const [nextHref, setNextHref] = useState<string>("#what-we-do");
   const [nextLabel, setNextLabel] = useState<string>("What can we do?");
 
+  const sectionIds = useMemo(
+    () => ["hero", "what-we-do", ...(showAssistant ? ["assistant"] : []), ...(showBlog ? ["blog"] : [])],
+    [showAssistant, showBlog]
+  );
+
   useEffect(() => {
     // IntersectionObserver to determine current section and choose the next one
-    const ids = ["hero", "what-we-do", "assistant", "blog"];
+    const ids = sectionIds;
+    if (!ids.length) {
+      return;
+    }
+
     const els = ids
       .map((id) => document.getElementById(id))
       .filter((el): el is HTMLElement => !!el);
 
     // Initialize from defaults
     const updateFromIndex = (idx: number) => {
+      if (!ids.length) return;
       const nextIdx = (idx + 1) % ids.length;
       const nextId = ids[nextIdx];
       const nextEl = document.getElementById(nextId);
@@ -92,7 +105,7 @@ export default function Home() {
 
     els.forEach((el) => io.observe(el));
     return () => io.disconnect();
-  }, []);
+  }, [sectionIds]);
 
   // Simple in-app test harness (avoid regex literals in TSX to prevent parser hiccups)
   useEffect(() => {
@@ -129,13 +142,20 @@ export default function Home() {
     const servicesTitle = document.querySelector('[data-testid="services-title"]');
     results.push({ name: "Services title is 'What can we do?'", pass: servicesTitle?.textContent?.trim() === "What can we do?" });
 
-    // Assistant title
-    const assistantTitle = document.querySelector('[data-testid="assistant-title"]');
-    results.push({ name: "Assistant title updated", pass: assistantTitle?.textContent?.trim() === "How can PMC help you?" });
+    const assistantSection = document.getElementById("assistant");
+    if (showAssistant) {
+      const assistantTitle = assistantSection?.querySelector('[data-testid="assistant-title"]');
+      results.push({
+        name: "Assistant title updated",
+        pass: assistantTitle?.textContent?.trim() === "How can PMC help you?",
+      });
 
-    // Ask button
-    const askBtn = document.querySelector('[data-testid="ask-btn"]');
-    results.push({ name: "Ask button reads 'Ask PMC AI'", pass: (askBtn?.textContent || "").trim() === "Ask PMC AI" });
+      const askBtn = assistantSection?.querySelector('[data-testid="ask-btn"]');
+      results.push({ name: "Ask button reads 'Ask PMC AI'", pass: (askBtn?.textContent || "").trim() === "Ask PMC AI" });
+    } else {
+      results.push({ name: "Assistant section hidden", pass: !assistantSection });
+      results.push({ name: "Assistant CTA hidden", pass: !document.querySelector('[data-testid="ask-btn"]') });
+    }
 
     // Per-card integrations present
     const integrations = document.querySelectorAll('[data-testid="integrations"]');
@@ -165,18 +185,25 @@ export default function Home() {
     results.push({ name: "Sticky CTA initial href is #what-we-do", pass: stickyCta?.getAttribute("href") === "#what-we-do" });
     results.push({ name: "Sticky CTA text includes next label", pass: !!stickyCta && (stickyCta.textContent || "").includes("What can we do?") });
 
-    // Blog section exists and has posts
     const blogSection = document.querySelector('[data-testid="blog-section"]');
-    const blogCards = document.querySelectorAll('[data-testid="blog-card"]');
-    results.push({ name: "Blog section exists", pass: !!blogSection });
-    results.push({ name: "Blog has posts", pass: blogCards.length === blogPosts.length, details: `found ${blogCards.length} / expected ${blogPosts.length}` });
+    if (showBlog) {
+      const blogCards = document.querySelectorAll('[data-testid="blog-card"]');
+      results.push({ name: "Blog section exists", pass: !!blogSection });
+      results.push({
+        name: "Blog has posts",
+        pass: blogCards.length === blogPosts.length,
+        details: `found ${blogCards.length} / expected ${blogPosts.length}`,
+      });
+    } else {
+      results.push({ name: "Blog section hidden", pass: !blogSection });
+    }
 
     // New: sanity check for the See What We Do anchor
     const seeWhat = document.querySelector('a[href="#what-we-do"]');
     results.push({ name: "Hero has 'See What We Do' anchor", pass: !!seeWhat });
 
     setTests(results);
-  }, []);
+  }, [showAssistant, showBlog]);
 
   async function askModel() {
     setLoading(true);
@@ -259,74 +286,87 @@ export default function Home() {
       </section>
 
       {/* Freeform model box */}
-      <section id="assistant" data-section-title="How can PMC help you?" className="mx-auto max-w-6xl px-4 py-12">
-        <div className="rounded-2xl border border-black/20 p-6">
-          <div className="flex items-center justify-between gap-4 flex-wrap">
-            <h3 className="text-lg font-semibold" data-testid="assistant-title">How can PMC help you?</h3>
-            <span className="text-xs text-black/50">Calls custom PMC model to answer your questions</span>
-          </div>
-
-          <label htmlFor="prompt" className="sr-only">
-            Describe your process, tools, and pain points
-          </label>
-          <textarea
-            id="prompt"
-            value={prompt}
-            onChange={(e) => setPrompt(e.target.value)}
-            placeholder="Describe your process, tools, and pain points…"
-            className="mt-4 w-full min-h-[120px] rounded-xl border border-black/30 p-4 focus:outline-none focus:ring-0 focus:border-black bg-white"
-          />
-
-          <div className="mt-3 flex items-center gap-3">
-            <button
-              onClick={askModel}
-              disabled={loading}
-              className="rounded-full border border-black px-4 py-2 text-sm font-medium disabled:opacity-50 hover:bg-black hover:text-white transition"
-              data-testid="ask-btn"
-            >
-              {loading ? "Thinking…" : "Ask PMC AI"}
-            </button>
-            <a href="#blog" className="text-sm underline underline-offset-4">or read the blog</a>
-          </div>
-
-          <div className="mt-5 rounded-xl border border-black/10 bg-zinc-50 p-4 min-h-[80px]">
-            <div className="text-xs uppercase tracking-wider text-black/50 mb-2">Response</div>
-            <div className="text-sm leading-relaxed">
-              {answer ?? (
-                <span className="text-black/50">
-                  Your tailored outline will appear here.
-                </span>
-              )}
+      {showAssistant ? (
+        <section id="assistant" data-section-title="How can PMC help you?" className="mx-auto max-w-6xl px-4 py-12">
+          <div className="rounded-2xl border border-black/20 p-6">
+            <div className="flex items-center justify-between gap-4 flex-wrap">
+              <h3 className="text-lg font-semibold" data-testid="assistant-title">How can PMC help you?</h3>
+              <span className="text-xs text-black/50">Calls custom PMC model to answer your questions</span>
             </div>
-          </div>
 
-        </div>
-      </section>
+            <label htmlFor="prompt" className="sr-only">
+              Describe your process, tools, and pain points
+            </label>
+            <textarea
+              id="prompt"
+              value={prompt}
+              onChange={(e) => setPrompt(e.target.value)}
+              placeholder="Describe your process, tools, and pain points…"
+              className="mt-4 w-full min-h-[120px] rounded-xl border border-black/30 p-4 focus:outline-none focus:ring-0 focus:border-black bg-white"
+            />
+
+            <div className="mt-3 flex items-center gap-3">
+              <button
+                onClick={askModel}
+                disabled={loading}
+                className="rounded-full border border-black px-4 py-2 text-sm font-medium disabled:opacity-50 hover:bg-black hover:text-white transition"
+                data-testid="ask-btn"
+              >
+                {loading ? "Thinking…" : "Ask PMC AI"}
+              </button>
+              {showBlog ? (
+                <a href="#blog" className="text-sm underline underline-offset-4">
+                  or read the blog
+                </a>
+              ) : null}
+            </div>
+
+            <div className="mt-5 rounded-xl border border-black/10 bg-zinc-50 p-4 min-h-[80px]">
+              <div className="text-xs uppercase tracking-wider text-black/50 mb-2">Response</div>
+              <div className="text-sm leading-relaxed">
+                {answer ?? (
+                  <span className="text-black/50">
+                    Your tailored outline will appear here.
+                  </span>
+                )}
+              </div>
+            </div>
+
+          </div>
+        </section>
+      ) : null}
 
       {/* Blog section */}
-      <section id="blog" data-section-title="Learn more about our work" data-testid="blog-section" className="mx-auto max-w-6xl px-4 py-12">
-        <div className="flex items-baseline justify-between">
-          <h2 className="text-2xl font-semibold">Learn more about our work</h2>
-          <span className="text-xs text-black/50">Examples • How‑tos • Case studies</span>
-        </div>
-        <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-          {blogPosts.map((p) => (
-            <article key={p.title} data-testid="blog-card" className="rounded-2xl border border-black/20 p-6 hover:border-black transition">
-              <div className="text-xs text-black/50">{new Date(p.date).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: '2-digit' })}</div>
-              <h3 className="mt-1 text-lg font-semibold">{p.title}</h3>
-              <p className="mt-2 text-sm text-black/70">{p.excerpt}</p>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {p.tags.map((t) => (
-                  <span key={t} className="text-xs border border-black/20 rounded-full px-2 py-0.5">{t}</span>
-                ))}
-              </div>
-              <Link to={`/blog/${slug(p.title)}`} className="mt-4 inline-block text-sm underline underline-offset-4">
-                Read more
-              </Link>
-            </article>
-          ))}
-        </div>
-      </section>
+      {showBlog ? (
+        <section
+          id="blog"
+          data-section-title="Learn more about our work"
+          data-testid="blog-section"
+          className="mx-auto max-w-6xl px-4 py-12"
+        >
+          <div className="flex items-baseline justify-between">
+            <h2 className="text-2xl font-semibold">Learn more about our work</h2>
+            <span className="text-xs text-black/50">Examples • How‑tos • Case studies</span>
+          </div>
+          <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+            {blogPosts.map((p) => (
+              <article key={p.title} data-testid="blog-card" className="rounded-2xl border border-black/20 p-6 hover:border-black transition">
+                <div className="text-xs text-black/50">{new Date(p.date).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "2-digit" })}</div>
+                <h3 className="mt-1 text-lg font-semibold">{p.title}</h3>
+                <p className="mt-2 text-sm text-black/70">{p.excerpt}</p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {p.tags.map((t) => (
+                    <span key={t} className="text-xs border border-black/20 rounded-full px-2 py-0.5">{t}</span>
+                  ))}
+                </div>
+                <Link to={`/blog/${slug(p.title)}`} className="mt-4 inline-block text-sm underline underline-offset-4">
+                  Read more
+                </Link>
+              </article>
+            ))}
+          </div>
+        </section>
+      ) : null}
 
       {/* Footer */}
       <footer className="border-t border-black/10">
