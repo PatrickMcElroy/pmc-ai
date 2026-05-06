@@ -5,19 +5,19 @@ const EMAIL = "consulting@patrickmcelroy.me";
 
 const focusAreas = [
   {
-    title: "Strategy",
+    title: "Software & tools",
     blurb:
-      "An outside perspective on positioning, priorities, and the decisions that move the business.",
+      "Pick the right software, skip the wrong stuff, and make AI and automation actually useful day to day.",
   },
   {
-    title: "Technology",
+    title: "Day-to-day operations",
     blurb:
-      "Practical, durable choices about AI, automation, and the systems your team depends on.",
+      "Fix the bottlenecks, clean up the handoffs, and get more done without adding headcount.",
   },
   {
-    title: "Operations",
+    title: "Where to focus next",
     blurb:
-      "Sharper process and tooling — and the handoffs in between — so the work gets done cleanly.",
+      "Sort through the options and figure out what actually moves the needle for your business.",
   },
 ];
 
@@ -40,20 +40,19 @@ export default function App() {
       </header>
 
       {/* Hero */}
-      <section className="mx-auto w-full max-w-5xl px-6 py-24 md:py-32">
+      <section className="mx-auto w-full max-w-5xl px-6 pt-12 pb-10 md:pt-16 md:pb-14">
         <p className="text-xs uppercase tracking-[0.2em] text-black/50">
-          Patrick McElroy Consulting
+          Patrick McElroy Consulting · Norfolk, VA
         </p>
-        <h1 className="mt-5 text-4xl md:text-6xl font-semibold leading-[1.05] tracking-tight">
-          Independent advisory
-          <br />
-          for founders and operators.
+        <h1 className="mt-4 text-4xl md:text-5xl font-semibold leading-[1.1] tracking-tight">
+          Straightforward advice for small businesses.
         </h1>
-        <p className="mt-6 max-w-2xl text-lg text-black/70 leading-relaxed">
-          A trusted outside perspective on the decisions that move the business —
-          strategy, technology, and how the work actually gets done.
+        <p className="mt-5 max-w-2xl text-lg text-black/70 leading-relaxed">
+          I help local owners pick the right tools, smooth out day-to-day
+          operations, and think through what's next — without the
+          consultant-speak.
         </p>
-        <div className="mt-10 flex flex-wrap items-center gap-4">
+        <div className="mt-7 flex flex-wrap items-center gap-4">
           <a
             href={CALENDLY}
             target="_blank"
@@ -73,13 +72,15 @@ export default function App() {
 
       {/* Focus */}
       <section className="border-t border-black/10">
-        <div className="mx-auto w-full max-w-5xl px-6 py-20">
-          <h2 className="text-xs uppercase tracking-[0.2em] text-black/50">Focus</h2>
-          <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-12">
+        <div className="mx-auto w-full max-w-5xl px-6 py-12 md:py-14">
+          <h2 className="text-xs uppercase tracking-[0.2em] text-black/50">
+            How I help
+          </h2>
+          <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">
             {focusAreas.map((area) => (
               <div key={area.title}>
-                <div className="text-lg font-semibold">{area.title}</div>
-                <p className="mt-3 text-black/70 leading-relaxed">{area.blurb}</p>
+                <div className="text-base font-semibold">{area.title}</div>
+                <p className="mt-2 text-black/70 leading-relaxed">{area.blurb}</p>
               </div>
             ))}
           </div>
@@ -88,16 +89,9 @@ export default function App() {
 
       {/* Footer */}
       <footer className="mt-auto border-t border-black/10">
-        <div className="mx-auto w-full max-w-5xl px-6 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-sm text-black/60">
+        <div className="mx-auto w-full max-w-5xl px-6 py-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-sm text-black/60">
           <div>© 2026 Patrick McElroy Consulting LLC</div>
-          <a
-            href={CALENDLY}
-            target="_blank"
-            rel="noreferrer"
-            className="hover:text-black transition"
-          >
-            Schedule a call →
-          </a>
+          <div>Norfolk, Virginia</div>
         </div>
       </footer>
     </main>
